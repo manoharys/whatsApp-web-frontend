@@ -18,8 +18,6 @@ export const getRooms = ()=> async (dispatch) =>{
 export const setUser = (data)=>{
    return {
        type: ACTIONS.SET_USER,
-       payload : {
-           userData : data
-       }
+       payload : data
    }   
 }

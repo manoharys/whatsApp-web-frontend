@@ -9,27 +9,28 @@ import "./sidebar.css";
 import SideBarChat from "./SideBarChat";
 import { useSelector, useDispatch } from "react-redux";
 
-
 const SideBar = () => {
   const [rooms, setRooms] = useState([]);
-  const user = useSelector(state => state.rooms.user);
-  
+  const user = useSelector((state) => state.rooms.user);
+  const roomsData = useSelector((state) => state.rooms.rooms);
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    db.collection("rooms").onSnapshot((onSnap) =>
-      setRooms(
-        onSnap.docs.map((doc) => ({
-          id: doc.id,
-          data: doc.data(),
-        }))
-      )
-    );
-  }, []);
+ 
+  // useEffect(() => {
+  //   db.collection("rooms").onSnapshot((onSnap) =>
+  //     setRooms(
+  //       onSnap.docs.map((doc) => ({
+  //         id: doc.id,
+  //         data: doc.data(),
+  //       }))
+  //     )
+  //   );
+  // }, []);
 
   return (
     <div className="sideBar">
       <div className="sideBar_header">
-        <Avatar src={user?.photoURL}/>
+        <Avatar src={user?.photoURL} />
         <div className="sidebar_headerRight">
           <IconButton>
             <DonutLargeIcon />
@@ -51,9 +52,9 @@ const SideBar = () => {
       <div className="sideBar_chat">
         <SideBarChat addNewChat={"hello"} />
 
-        {rooms.map((room) => (
-          <SideBarChat key={room.id} name={room.data.name} id={room.id} />
-        ))}
+        {/* {rooms && rooms.map((room) => (
+          <SideBarChat key={room.id} name={room.name} id={room.id} />
+        ))} */}
       </div>
     </div>
   );

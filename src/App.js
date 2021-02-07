@@ -3,27 +3,25 @@ import "./App.css";
 import SideBar from "./components/SideBar";
 import Chat from "./components/Chat";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 import { UseStateValue } from "./globalContext/StateProvider";
-import Pusher from "pusher-js"
-
+import Pusher from "pusher-js";
 import Login from "./components/login/Login";
 
 function App() {
-
   //pusher-js for realtime synch with mongo DB
-  useEffect(() => {   
-    const pusher = new Pusher('945758d3b6566a1295a9', {
-      cluster: 'ap2'
+  useEffect(() => {
+    const pusher = new Pusher("945758d3b6566a1295a9", {
+      cluster: "ap2",
     });
-    const channel = pusher.subscribe('messages');
-    channel.bind('inserted', function(data) {
+    const channel = pusher.subscribe("messages");
+    channel.bind("inserted", function (data) {
       alert(JSON.stringify(data));
     });
-  }, [])
-  
-  const user = useSelector(state => state.rooms.user)
+  }, []);
 
+  const user = useSelector((state) => state.rooms.user);
+  console.log(user);
 
   return (
     <div className="App">
@@ -39,9 +37,7 @@ function App() {
               <Route path="/rooms/:roomId">
                 <Chat />
               </Route>
-              <Route path="/">
-                {/* <Chat /> */}
-              </Route>
+              <Route path="/">{/* <Chat /> */}</Route>
             </Switch>
           </Router>
         </div>

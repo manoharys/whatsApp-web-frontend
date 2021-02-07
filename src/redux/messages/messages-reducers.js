@@ -1,7 +1,7 @@
 import * as ACTIONS from "./message-actionTypes";
 
 const initialState = {
-  user: [],
+  user: null,
   rooms: [],
 };
 
@@ -14,8 +14,7 @@ const reducer = (state = initialState, action) => {
       };
     case ACTIONS.SET_USER:
       return {
-        ...state,
-        user: action.payload.userData,
+        user: action.payload
       };
     default:
       return state;
