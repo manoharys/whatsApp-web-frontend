@@ -7,11 +7,13 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SearchIcon from "@material-ui/icons/Search";
 import "./sidebar.css";
 import SideBarChat from "./SideBarChat";
-import { UseStateValue } from "../globalContext/StateProvider";
+import { useSelector, useDispatch } from "react-redux";
+
 
 const SideBar = () => {
   const [rooms, setRooms] = useState([]);
-  const [{ user }, dispatch] = UseStateValue();
+  const user = useSelector(state => state.rooms.user);
+  
 
   useEffect(() => {
     db.collection("rooms").onSnapshot((onSnap) =>

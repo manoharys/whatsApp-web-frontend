@@ -3,10 +3,11 @@ import "./App.css";
 import SideBar from "./components/SideBar";
 import Chat from "./components/Chat";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {useSelector} from "react-redux";
 import { UseStateValue } from "./globalContext/StateProvider";
 import Pusher from "pusher-js"
 
-import Login from "./components/login/login";
+import Login from "./components/login/Login";
 
 function App() {
 
@@ -20,8 +21,9 @@ function App() {
       alert(JSON.stringify(data));
     });
   }, [])
+  
+  const user = useSelector(state => state.rooms.user)
 
-  const [{ user }, dispatch] = UseStateValue();
 
   return (
     <div className="App">
