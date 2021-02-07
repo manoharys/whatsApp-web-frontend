@@ -12,7 +12,7 @@ function login() {
     auth
       .signInWithPopup(provider)
       .then((result) => {
-        console.log(result.user)
+        //console.log(result.user)
         dispatch({type: actionTypes.SET_USER, user: result.user})
       })
       .catch((err) => alert(err.message));
