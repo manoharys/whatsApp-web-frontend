@@ -20,7 +20,7 @@ const SideBar = () => {
 
   useEffect(() => {
     dispatch(getRooms());
-  }, []);
+  }, [roomsData, rooms]);
 
   useEffect(() => {
     setRooms(roomsData);
@@ -33,8 +33,22 @@ const SideBar = () => {
     });
     const channel = pusher.subscribe("messages");
     channel.bind("inserted", (data) => {
-      console.log((data));
-      dispatch(updateRoomData((data)));
+      dispatch(updateRoomData(data));
+    });
+
+    return () => {
+      channel.unsubscribe();
+      channel.unbind();
+    };
+  }, [roomsData]);
+
+  useEffect(() => {
+    const pusher = new Pusher("945758d3b6566a1295a9", {
+      cluster: "ap2",
+    });
+    const channel = pusher.subscribe("message");
+    channel.bind("updated", (data) => {
+      dispatch(getRooms());
     });
 
     return () => {
@@ -67,11 +81,8 @@ const SideBar = () => {
       </div>
       <div className="sideBar_chat">
         <SideBarChat addNewChat={"hello"} />
-         {console.log("rooms",rooms)}
         {rooms &&
-          rooms.map((room) => (
-            <SideBarChat key={room.id} room = {room}/>
-          ))}
+          rooms.map((room) => <SideBarChat key={room.id} room={room} />)}
       </div>
     </div>
   );

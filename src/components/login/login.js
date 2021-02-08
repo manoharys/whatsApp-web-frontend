@@ -1,19 +1,19 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Button } from "@material-ui/core";
 import "./login.css";
-import { useSelector, useDispatch } from "react-redux";
+import {useDispatch } from "react-redux";
 import { setUser } from "../../redux/messages/messages-actions";
 import { auth, provider } from "../../firebase";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const [userData, setUserData] = React.useState();
+
 
   const signIn = () => {
     auth
       .signInWithPopup(provider)
       .then((result) => {
-        console.log(result.user);
+  
         // setUserData(result.user)
         dispatch(setUser(result.user))
         

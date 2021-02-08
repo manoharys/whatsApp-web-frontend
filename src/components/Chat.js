@@ -10,34 +10,34 @@ import MicNoneIcon from "@material-ui/icons/MicNone";
 import React, { useState, useEffect } from "react";
 import "./chat.css";
 import { useParams } from "react-router-dom";
-import { getSingleRoom } from "../api/api";
+import { getSingleRoom, addMessage } from "../api/api";
 import { useSelector } from "react-redux";
 
 function Chat() {
   const user = useSelector((state) => state.rooms.user);
+  const roomsData = useSelector((state) => state.rooms.rooms);
   const [input, setInput] = useState("");
   const [seed, setSeed] = useState("123");
   const [roomName, setRoomName] = useState("");
   const { roomId } = useParams();
   const [messages, setMessages] = useState([]);
 
-  console.log(roomId);
-
   const avatar = `https://avatars.dicebear.com/api/human/${seed}.svg`;
 
   const room = async () => {
-    const { data } = await getSingleRoom(roomId);
-    console.log("Roomdata", data);
-    setRoomName(data.name);
-    setMessages(data.roomMessages);
+    try {
+      const { data } = await getSingleRoom(roomId);
+      setRoomName(data.name);
+      setMessages(data.roomMessages);
+    } catch (error) {
+      console.log(error);
+    }
   };
   useEffect(() => {
     if (roomId) {
       room();
     }
-  }, [roomId]);
-
-  console.log("roomName ", roomName);
+  }, [roomsData]);
 
   useEffect(() => {
     setSeed(Math.floor(Math.random() * 5000));
@@ -45,15 +45,17 @@ function Chat() {
 
   const btnHandler = (e) => {
     e.preventDefault();
-    //console.log(input);
-    // db.collection("rooms").doc(roomId).collection("messages").add({
-    //   message: input,
-    //   name: user.displayName,
-    //   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-    // });
+    const data = {
+      id: roomId,
+      name: user.displayName,
+      message: input,
+    };
+
+    addMessage(data);
 
     setInput("");
   };
+
   return (
     <div className="chat">
       <div className="chat_header">
@@ -61,7 +63,8 @@ function Chat() {
 
         <div className="chat_headerInfo">
           <h3>{roomName}</h3>
-          <p>last seen at {new Date(messages[0].date).toLocaleTimeString()}</p>
+
+          <p>last seen at {new Date().toLocaleTimeString()}</p>
         </div>
 
         <div className="chat_headerRight">
@@ -80,6 +83,7 @@ function Chat() {
       <div className="chat_body">
         {messages.map((message) => (
           <p
+            key={message.id}
             className={`chat_message ${
               message.name === user.displayName && "chat_reciever"
             }`}
@@ -87,7 +91,7 @@ function Chat() {
             <span className="chat_name">{message.name} </span>
             {message.message}
             <span className="chat_timestamp">
-              {new Date(messages[0].date).toLocaleTimeString()}
+              {new Date(message.date).toLocaleTimeString()}
             </span>
           </p>
         ))}

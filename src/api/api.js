@@ -36,3 +36,20 @@ export const getSingleRoom = async (id) => {
     console.log(error);
   }
 };
+
+export const addMessage = async (data) => {
+  try {
+    const url = `http://localhost:3030/posts/room/${data.id}`;
+    console.log("running");
+    const addRooms = await axios({
+      method: "post",
+      url: url,
+      data: {
+        name: data.name,
+        message: data.message,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
