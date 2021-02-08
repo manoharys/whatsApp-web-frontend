@@ -1,22 +1,26 @@
 import React from "react";
 import { Button } from "@material-ui/core";
 import "./login.css";
+import {useDispatch } from "react-redux";
+import { setUser } from "../../redux/messages/messages-actions";
 import { auth, provider } from "../../firebase";
-import {UseStateValue} from "../../globalContext/StateProvider";
-import {actionTypes} from "../../globalContext/reducer";
 
-function login() {
- const [{}, dispatch] = UseStateValue();
+const Login = () => {
+  const dispatch = useDispatch();
+
 
   const signIn = () => {
     auth
       .signInWithPopup(provider)
       .then((result) => {
-        //console.log(result.user)
-        dispatch({type: actionTypes.SET_USER, user: result.user})
+  
+        // setUserData(result.user)
+        dispatch(setUser(result.user))
+        
       })
       .catch((err) => alert(err.message));
   };
+
 
   return (
     <div className="login">
@@ -33,6 +37,6 @@ function login() {
       </div>
     </div>
   );
-}
+};
 
-export default login;
+export default Login;
