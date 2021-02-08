@@ -26,9 +26,8 @@ function Chat() {
   const avatar = `https://avatars.dicebear.com/api/human/${seed}.svg`;
 
   const room = async () => {
-    console.log("hiiiiiiii");
-    const {data} = await getSingleRoom(roomId);
-    console.log("Roomdata", data)
+    const { data } = await getSingleRoom(roomId);
+    console.log("Roomdata", data);
     setRoomName(data.name);
     setMessages(data.roomMessages);
   };
@@ -62,12 +61,7 @@ function Chat() {
 
         <div className="chat_headerInfo">
           <h3>{roomName}</h3>
-          <p>
-            last seen at{" "}
-            {/* {new Date(
-              messages[messages.length - 1]?.timestamp?.toDate()
-            ).toUTCString()} */}
-          </p>
+          <p>last seen at {new Date(messages[0].date).toLocaleTimeString()}</p>
         </div>
 
         <div className="chat_headerRight">
@@ -84,7 +78,7 @@ function Chat() {
       </div>
       {/* chat body */}
       <div className="chat_body">
-        {/* {messages.map((message) => (
+        {messages.map((message) => (
           <p
             className={`chat_message ${
               message.name === user.displayName && "chat_reciever"
@@ -93,10 +87,10 @@ function Chat() {
             <span className="chat_name">{message.name} </span>
             {message.message}
             <span className="chat_timestamp">
-              {new Date(message.timestamp?.toDate()).toUTCString()}
+              {new Date(messages[0].date).toLocaleTimeString()}
             </span>
           </p>
-        ))} */}
+        ))}
       </div>
 
       {/* chat footer */}
