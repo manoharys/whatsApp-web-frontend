@@ -9,34 +9,36 @@ import MoodIcon from "@material-ui/icons/Mood";
 import MicNoneIcon from "@material-ui/icons/MicNone";
 import React, { useState, useEffect } from "react";
 import "./chat.css";
-import db from "../firebase";
 import { useParams } from "react-router-dom";
-import { UseStateValue } from "../globalContext/StateProvider";
-import firebase from "firebase";
+import { getSingleRoom } from "../api/api";
+import { useSelector } from "react-redux";
 
 function Chat() {
-  const [{ user }, dispatch] = UseStateValue();
+  const user = useSelector((state) => state.rooms.user);
   const [input, setInput] = useState("");
   const [seed, setSeed] = useState("123");
   const [roomName, setRoomName] = useState("");
   const { roomId } = useParams();
   const [messages, setMessages] = useState([]);
 
+  console.log(roomId);
+
   const avatar = `https://avatars.dicebear.com/api/human/${seed}.svg`;
 
+  const room = async () => {
+    console.log("hiiiiiiii");
+    const {data} = await getSingleRoom(roomId);
+    console.log("Roomdata", data)
+    setRoomName(data.name);
+    setMessages(data.roomMessages);
+  };
   useEffect(() => {
     if (roomId) {
-      db.collection("rooms")
-        .doc(roomId)
-        .onSnapshot((snap) => setRoomName(snap.data().name));
-
-      db.collection("rooms")
-        .doc(roomId)
-        .collection("messages")
-        .orderBy("timestamp", "asc")
-        .onSnapshot((snap) => setMessages(snap.docs.map((doc) => doc.data())));
+      room();
     }
   }, [roomId]);
+
+  console.log("roomName ", roomName);
 
   useEffect(() => {
     setSeed(Math.floor(Math.random() * 5000));
@@ -45,11 +47,12 @@ function Chat() {
   const btnHandler = (e) => {
     e.preventDefault();
     //console.log(input);
-    db.collection("rooms").doc(roomId).collection("messages").add({
-      message: input,
-      name: user.displayName,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+    // db.collection("rooms").doc(roomId).collection("messages").add({
+    //   message: input,
+    //   name: user.displayName,
+    //   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    // });
+
     setInput("");
   };
   return (
@@ -61,9 +64,9 @@ function Chat() {
           <h3>{roomName}</h3>
           <p>
             last seen at{" "}
-            {new Date(
+            {/* {new Date(
               messages[messages.length - 1]?.timestamp?.toDate()
-            ).toUTCString()}
+            ).toUTCString()} */}
           </p>
         </div>
 
@@ -81,7 +84,7 @@ function Chat() {
       </div>
       {/* chat body */}
       <div className="chat_body">
-        {messages.map((message) => (
+        {/* {messages.map((message) => (
           <p
             className={`chat_message ${
               message.name === user.displayName && "chat_reciever"
@@ -93,7 +96,7 @@ function Chat() {
               {new Date(message.timestamp?.toDate()).toUTCString()}
             </span>
           </p>
-        ))}
+        ))} */}
       </div>
 
       {/* chat footer */}

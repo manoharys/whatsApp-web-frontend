@@ -4,14 +4,13 @@ import SideBar from "./components/SideBar";
 import Chat from "./components/Chat";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { UseStateValue } from "./globalContext/StateProvider";
 import Login from "./components/login/Login";
-import { getRooms, updateRoomData } from "./redux/messages/messages-actions";
+
 
 function App() {
-  const dispatch = useDispatch();
+
   const user = useSelector((state) => state.rooms.user);
-  const rooms = useSelector((state) => state.rooms.rooms);
+
 
 
 

@@ -24,7 +24,7 @@ const SideBar = () => {
 
   useEffect(() => {
     setRooms(roomsData);
-  }, [roomsData]);
+  }, [roomsData, rooms, setRooms]);
 
   //pusher-js for realtime synch with mongo DB
   useEffect(() => {
@@ -67,7 +67,7 @@ const SideBar = () => {
       </div>
       <div className="sideBar_chat">
         <SideBarChat addNewChat={"hello"} />
-
+         {console.log("rooms",rooms)}
         {rooms &&
           rooms.map((room) => (
             <SideBarChat key={room.id} room = {room}/>

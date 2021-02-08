@@ -18,11 +18,20 @@ export const addRooms = async (data) => {
       data: {
         name: data.name,
         roomMessages: {
-          name: data.name,
-          message: data.message,
+          name: data.roomMessages.name,
+          message: data.roomMessages.message,
         },
       },
     });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getSingleRoom = async (id) => {
+  try {
+    const room = await axios.get(`http://localhost:3030/posts/room/${id}`);
+    return room;
   } catch (error) {
     console.log(error);
   }
