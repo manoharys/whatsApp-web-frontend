@@ -1,6 +1,8 @@
 # WhatsApp-Web
-##### A clone of WhatsApp Web. - <a href='https://whatsapp-web-233c7.web.app/'> check here </a>
-  
+
+##### WhatsApp web application using MERN stack
+##### This repository corresponds to <a href="https://github.com/manoharys/WhatsApp-Web-React"> whatsApp-react(used firebase db)</a> - <a href='https://whatsapp-web-233c7.web.app/'> check here </a>
+##### Backend repo => <a href="https://github.com/manoharys/whatsapp-web-backend"> here</a> 
 ---
 
 ### Table of Contents
@@ -14,7 +16,7 @@
 ---
 
 ## Description
-  ##### Provides an in-depth view of implementation on how to create a hybrid WhatsApp web application from scratch using ReactJs, material UI, google authentication, Firebase real-time DB & Firebase Deployment.
+  ##### Provides an in-depth view of implementation on how to create a room based hybrid WhatsApp web application from scratch using MERN stack
   
   
    [Back To The Top](#WhatsApp-Web)
@@ -37,7 +39,7 @@
 
 - First clone this repository.
 ```bash
-$ git clone https://github.com/manoharys/WhatsApp-Web-React.git
+$ git clone https://github.com/manoharys/whatsApp-web-frontend.git
 ```
 
 - Install dependencies. Make sure you already have [`nodejs`](https://nodejs.org/en/) & [`npm`](https://www.npmjs.com/) installed in your system.
