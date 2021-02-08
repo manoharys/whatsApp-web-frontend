@@ -9,3 +9,21 @@ export const getRooms = async () => {
   }
 };
 
+export const addRooms = async (data) => {
+  try {
+    const url = "http://localhost:3030/posts/room";
+    const addRooms = await axios({
+      method: "post",
+      url: url,
+      data: {
+        name: data.name,
+        roomMessages: {
+          name: data.name,
+          message: data.message,
+        },
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};

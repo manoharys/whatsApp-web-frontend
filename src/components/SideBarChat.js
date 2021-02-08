@@ -3,21 +3,12 @@ import { Avatar } from "@material-ui/core";
 import "./sideBarChat.css";
 import db from "../firebase";
 import { Link } from "react-router-dom";
+import { addRooms } from "../api/api";
 
-const SideBarChat = ({ addNewChat, id, name }) => {
+const SideBarChat = ({ addNewChat, room }) => {
   const [messages, setMessages] = useState("");
   const [seed, setSeed] = useState("123");
   const avatar = `https://avatars.dicebear.com/api/human/${seed}.svg`;
-
-  useEffect(() => {
-    if (id) {
-      db.collection("rooms")
-        .doc(id)
-        .collection("messages")
-        .orderBy("timestamp", "desc")
-        .onSnapshot((snap) => setMessages(snap.docs.map((doc) => doc.data())));
-    }
-  }, [id]);
 
   useEffect(() => {
     setSeed(Math.floor(Math.random() * 5000));
@@ -28,14 +19,19 @@ const SideBarChat = ({ addNewChat, id, name }) => {
 
     if (roomName) {
       //data base stuff
-      db.collection("rooms").add({
+      const data = {
         name: roomName,
-      });
+        roomMessages: {
+          name: "",
+          message: "",
+        },
+      };
+      addRooms(data);
     }
   };
 
   return !addNewChat ? (
-    <Link to={`/rooms/${id}`}>
+    <Link to={`/rooms/${room._id}`}>
       <div className="sidebarChat">
         <Avatar src={avatar} />
         <div className="sidebarChat_info">
@@ -45,7 +41,7 @@ const SideBarChat = ({ addNewChat, id, name }) => {
               color: "rgb(69 66 66)",
             }}
           >
-            {name}
+            {room.name}
           </h3>
           <p
             style={{
@@ -55,7 +51,9 @@ const SideBarChat = ({ addNewChat, id, name }) => {
               color: "#3a3838",
             }}
           >
-            {messages[0]?.message + ".."}
+            {room.roomMessages[0].message != undefined
+              ? room.roomMessages[0]?.message +   ".."
+              : "..."}
           </p>
         </div>
       </div>
