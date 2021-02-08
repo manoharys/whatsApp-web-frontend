@@ -1,31 +1,47 @@
 import React, { useState, useEffect } from "react";
-import db from "../firebase";
 import { Avatar, IconButton } from "@material-ui/core";
 import DonutLargeIcon from "@material-ui/icons/DonutLarge";
 import ChatIcon from "@material-ui/icons/Chat";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SearchIcon from "@material-ui/icons/Search";
+import Pusher from "pusher-js";
 import "./sidebar.css";
 import SideBarChat from "./SideBarChat";
 import { useSelector, useDispatch } from "react-redux";
+import { getRooms, updateRoomData } from "../redux/messages/messages-actions";
 
 const SideBar = () => {
-  const [rooms, setRooms] = useState([]);
+  const [rooms, setRooms] = useState();
+
   const user = useSelector((state) => state.rooms.user);
   const roomsData = useSelector((state) => state.rooms.rooms);
+
   const dispatch = useDispatch();
 
- 
-  // useEffect(() => {
-  //   db.collection("rooms").onSnapshot((onSnap) =>
-  //     setRooms(
-  //       onSnap.docs.map((doc) => ({
-  //         id: doc.id,
-  //         data: doc.data(),
-  //       }))
-  //     )
-  //   );
-  // }, []);
+  useEffect(() => {
+    dispatch(getRooms());
+  }, []);
+
+  useEffect(() => {
+    setRooms(roomsData);
+  }, [roomsData]);
+
+  //pusher-js for realtime synch with mongo DB
+  useEffect(() => {
+    const pusher = new Pusher("945758d3b6566a1295a9", {
+      cluster: "ap2",
+    });
+    const channel = pusher.subscribe("messages");
+    channel.bind("inserted", (data) => {
+      console.log((data));
+      dispatch(updateRoomData((data)));
+    });
+
+    return () => {
+      channel.unsubscribe();
+      channel.unbind();
+    };
+  }, [roomsData]);
 
   return (
     <div className="sideBar">
@@ -52,9 +68,10 @@ const SideBar = () => {
       <div className="sideBar_chat">
         <SideBarChat addNewChat={"hello"} />
 
-        {/* {rooms && rooms.map((room) => (
-          <SideBarChat key={room.id} name={room.name} id={room.id} />
-        ))} */}
+        {rooms &&
+          rooms.map((room) => (
+            <SideBarChat key={room.id} name={room.name} id={room.id} />
+          ))}
       </div>
     </div>
   );
